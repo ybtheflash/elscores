@@ -5,7 +5,13 @@ import ISC_DATA from "../data/ISC25.json";
 import Logo from "../components/Logo";
 
 // Map data to expected format
-function mapStudent(s: any) {
+type RawStudent = {
+  Name: string;
+  "English Marks": number;
+  "Overall Score": number;
+};
+
+function mapStudent(s: RawStudent): Student {
   return {
     name: s["Name"],
     english: s["English Marks"],
