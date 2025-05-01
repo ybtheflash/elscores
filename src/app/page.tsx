@@ -62,10 +62,7 @@ export default function Home() {
     >
       <header className="w-full flex items-center justify-between px-4 sm:px-8 pt-6 pb-2">
         <div className="flex items-center gap-2">
-          <Logo
-            className="w-12 h-12"
-            textClassName="font-maharlika text-2xl sm:text-3xl text-primary"
-          />
+          <Logo />
           <span className="hidden sm:inline-block font-inter text-2xl sm:text-3xl text-primary ml-2 tracking-tight font-bold">
             ENGLISH LEARNERS
           </span>
