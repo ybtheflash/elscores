@@ -151,7 +151,7 @@ export default function Home() {
                       }
                     >
                       <td
-                        className="p-4 whitespace-nowrap text-lg"
+                        className="p-4 whitespace-nowrap text-lg group relative"
                         style={
                           s.overall === maxOverall
                             ? {
@@ -168,8 +168,32 @@ export default function Home() {
                             ? `Overall % Highest: ${s.overall}`
                             : undefined
                         }
+                        tabIndex={s.overall === maxOverall ? 0 : undefined}
+                        onFocus={(e) => {
+                          if (s.overall === maxOverall) {
+                            e.currentTarget.setAttribute(
+                              "data-show-tooltip",
+                              "true"
+                            );
+                          }
+                        }}
+                        onBlur={(e) => {
+                          if (s.overall === maxOverall) {
+                            e.currentTarget.removeAttribute(
+                              "data-show-tooltip"
+                            );
+                          }
+                        }}
                       >
                         {s.name}
+                        {s.overall === maxOverall && (
+                          <span
+                            className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-10 px-3 py-1 rounded bg-black/90 text-white text-xs opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none transition-opacity duration-200"
+                            style={{ whiteSpace: "nowrap" }}
+                          >
+                            Overall % Highest: {s.overall}
+                          </span>
+                        )}
                       </td>
                       <td className="p-4 text-lg">{s.english}</td>
                     </tr>
