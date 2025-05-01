@@ -35,7 +35,7 @@ type SortKey = keyof Student;
 type SortDir = "asc" | "desc";
 
 export default function Home() {
-  const [board, setBoard] = useState<"ISC" | "ICSE">("ISC");
+  const [board, setBoard] = useState<"ISC" | "ICSE">("ICSE");
   const [sortKey, setSortKey] = useState<SortKey>("overall");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
@@ -62,10 +62,17 @@ export default function Home() {
     >
       <header className="w-full flex items-center justify-between px-4 sm:px-8 pt-6 pb-2">
         <div className="flex items-center gap-2">
-          <Logo />
-          <span className="hidden sm:inline-block font-inter text-2xl sm:text-3xl text-primary ml-2 tracking-tight font-bold">
-            ENGLISH LEARNERS
-          </span>
+          <a
+            href="https://myenglishlearners.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2"
+          >
+            <Logo />
+            <span className="hidden sm:inline-block font-inter text-2xl sm:text-3xl text-primary ml-2 tracking-tight font-bold">
+              ENGLISH LEARNERS
+            </span>
+          </a>
         </div>
         <span className="font-garet text-base sm:text-lg text-primary-dark dark:text-primary-light font-semibold">
           ISC & ICSE 2025 Results
@@ -79,20 +86,20 @@ export default function Home() {
             </h1>
             <div className="flex gap-2">
               <button
-                className={`px-5 py-2 rounded-full font-semibold border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-dark/40 ${
-                  board === "ISC" ? scheme.accent : scheme.border
-                } font-garet text-base sm:text-lg`}
-                onClick={() => setBoard("ISC")}
-              >
-                ISC
-              </button>
-              <button
                 className={`px-5 py-2 rounded-full font-semibold border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-literaree-primary/40 ${
                   board === "ICSE" ? scheme.accent : scheme.border
                 } font-garet text-base sm:text-lg`}
                 onClick={() => setBoard("ICSE")}
               >
                 ICSE
+              </button>
+              <button
+                className={`px-5 py-2 rounded-full font-semibold border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-dark/40 ${
+                  board === "ISC" ? scheme.accent : scheme.border
+                } font-garet text-base sm:text-lg`}
+                onClick={() => setBoard("ISC")}
+              >
+                ISC
               </button>
             </div>
           </div>
@@ -173,6 +180,29 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <footer className="w-full flex flex-col items-center justify-center gap-1 pb-4 pt-8 text-xs text-primary-dark dark:text-primary-light opacity-80">
+        <div className="flex flex-wrap gap-3 items-center justify-center">
+          <a
+            href="https://myenglishlearners.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline underline-offset-2"
+          >
+            myenglishlearners.in
+          </a>
+          <span className="mx-1">|</span>
+          <a
+            href="https://www.youtube.com/c/EnglishLearners07"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline underline-offset-2"
+          >
+            YouTube
+          </a>
+          <span className="mx-1">|</span>
+          <span>© 2025</span>
+        </div>
+      </footer>
     </div>
   );
 }

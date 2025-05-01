@@ -13,9 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ENGLISH LEARNERS ISC/ICSE 2025 Results",
+  title: "CISCE Results 2025 - English Learners",
   description:
     "Official results for ISC and ICSE 2025 students of ENGLISH LEARNERS (myenglishlearners.in)",
+  keywords: "CISCE, ISC, ICSE, English Learners, 2025 Results",
 };
 
 export default function RootLayout({
