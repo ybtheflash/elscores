@@ -138,49 +138,42 @@ export default function Home() {
                     English{" "}
                     {sortKey === "english" && (sortDir === "asc" ? "▲" : "▼")}
                   </th>
-                  <th
-                    className="p-4 text-left cursor-pointer select-none font-semibold text-primary-dark dark:text-primary-light hover:underline"
-                    onClick={() => {
-                      setSortKey("overall");
-                      setSortDir(
-                        sortKey === "overall" && sortDir === "asc"
-                          ? "desc"
-                          : "asc"
-                      );
-                    }}
-                  >
-                    Overall %{" "}
-                    {sortKey === "overall" && (sortDir === "asc" ? "▲" : "▼")}
-                  </th>
                 </tr>
               </thead>
               <tbody>
-                {sorted.map((s, i) => (
-                  <tr
-                    key={s.name}
-                    className={
-                      i < 10 ? `${scheme.highlight} font-bold scale-in` : ""
-                    }
-                  >
-                    <td
-                      className="p-4 whitespace-nowrap text-lg"
-                      style={
-                        s.overall === maxOverall
-                          ? {
-                              color: "#FFD700",
-                              fontWeight: 900,
-                              letterSpacing: "0.02em",
-                              textShadow: "0 1px 8px #FFD70044",
-                            }
-                          : undefined
+                {sorted
+                  .filter((s) => s.english >= 90)
+                  .map((s, i) => (
+                    <tr
+                      key={s.name}
+                      className={
+                        i < 10 ? `${scheme.highlight} font-bold scale-in` : ""
                       }
                     >
-                      {s.name}
-                    </td>
-                    <td className="p-4 text-lg">{s.english}</td>
-                    <td className="p-4 text-lg">{s.overall}</td>
-                  </tr>
-                ))}
+                      <td
+                        className="p-4 whitespace-nowrap text-lg"
+                        style={
+                          s.overall === maxOverall
+                            ? {
+                                color: "#FFD700",
+                                fontWeight: 900,
+                                letterSpacing: "0.02em",
+                                textShadow: "0 1px 8px #FFD70044",
+                                cursor: "pointer",
+                              }
+                            : undefined
+                        }
+                        title={
+                          s.overall === maxOverall
+                            ? `Overall % Highest: ${s.overall}`
+                            : undefined
+                        }
+                      >
+                        {s.name}
+                      </td>
+                      <td className="p-4 text-lg">{s.english}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
