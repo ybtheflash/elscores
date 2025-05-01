@@ -42,7 +42,7 @@ type SortDir = "asc" | "desc";
 
 export default function Home() {
   const [board, setBoard] = useState<"ISC" | "ICSE">("ICSE");
-  const [sortKey, setSortKey] = useState<SortKey>("overall");
+  const [sortKey, setSortKey] = useState<SortKey>("english");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
   const data =
