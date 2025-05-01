@@ -1,103 +1,181 @@
-import Image from "next/image";
+"use client";
+import { useState, useMemo } from "react";
+import ICSE_DATA from "../data/ICSE25.json";
+import ISC_DATA from "../data/ISC25.json";
+import Logo from "../components/Logo";
+
+// Map data to expected format
+function mapStudent(s: any) {
+  return {
+    name: s["Name"],
+    english: s["English Marks"],
+    overall: s["Overall Score"],
+  };
+}
+
+const schemes = {
+  ISC: {
+    bg: "bg-gradient-to-br from-primary-light to-primary-dark dark:from-[#1a1a1a] dark:to-[#927aa8]",
+    accent:
+      "bg-primary text-white border-primary-dark dark:bg-[#927aa8] dark:text-white dark:border-[#ae8fc6]",
+    border: "border-primary-light dark:border-[#927aa8]",
+    highlight: "bg-primary/10 dark:bg-[#ae8fc6]/20",
+  },
+  ICSE: {
+    bg: "bg-gradient-to-br from-literaree-primary to-primary-light dark:from-[#1f8ec2] dark:to-[#c4aed4]",
+    accent:
+      "bg-literaree-primary text-white border-primary-dark dark:bg-[#1f8ec2] dark:text-white dark:border-[#c4aed4]",
+    border: "border-literaree-primary dark:border-[#1f8ec2]",
+    highlight: "bg-literaree-primary/10 dark:bg-[#1f8ec2]/20",
+  },
+};
+
+type Student = { name: string; english: number; overall: number };
+type SortKey = keyof Student;
+type SortDir = "asc" | "desc";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [board, setBoard] = useState<"ISC" | "ICSE">("ISC");
+  const [sortKey, setSortKey] = useState<SortKey>("overall");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const data =
+    board === "ISC" ? ISC_DATA.map(mapStudent) : ICSE_DATA.map(mapStudent);
+  const scheme = schemes[board];
+
+  const sorted = useMemo(() => {
+    const arr = [...data];
+    arr.sort((a, b) => {
+      if (a[sortKey] < b[sortKey]) return sortDir === "asc" ? -1 : 1;
+      if (a[sortKey] > b[sortKey]) return sortDir === "asc" ? 1 : -1;
+      return 0;
+    });
+    return arr;
+  }, [data, sortKey, sortDir]);
+
+  // Find the highest overall scorer
+  const maxOverall = Math.max(...sorted.map((s) => s.overall));
+
+  return (
+    <div
+      className={`min-h-screen ${scheme.bg} transition-colors duration-300 flex flex-col`}
+    >
+      <header className="w-full flex items-center justify-between px-4 sm:px-8 pt-6 pb-2">
+        <div className="flex items-center gap-2">
+          <Logo
+            className="w-12 h-12"
+            textClassName="font-maharlika text-2xl sm:text-3xl text-primary"
+          />
+          <span className="hidden sm:inline-block font-inter text-2xl sm:text-3xl text-primary ml-2 tracking-tight font-bold">
+            ENGLISH LEARNERS
+          </span>
         </div>
+        <span className="font-garet text-base sm:text-lg text-primary-dark dark:text-primary-light font-semibold">
+          ISC & ICSE 2025 Results
+        </span>
+      </header>
+      <main className="flex-1 flex flex-col items-center justify-center w-full px-2 sm:px-0">
+        <section className="w-full max-w-3xl mx-auto mt-6 fade-in">
+          <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-6 gap-4">
+            <h1 className="font-maharlika text-3xl sm:text-4xl text-primary text-center sm:text-left drop-shadow-lg">
+              {board} Results
+            </h1>
+            <div className="flex gap-2">
+              <button
+                className={`px-5 py-2 rounded-full font-semibold border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-dark/40 ${
+                  board === "ISC" ? scheme.accent : scheme.border
+                } font-garet text-base sm:text-lg`}
+                onClick={() => setBoard("ISC")}
+              >
+                ISC
+              </button>
+              <button
+                className={`px-5 py-2 rounded-full font-semibold border shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-literaree-primary/40 ${
+                  board === "ICSE" ? scheme.accent : scheme.border
+                } font-garet text-base sm:text-lg`}
+                onClick={() => setBoard("ICSE")}
+              >
+                ICSE
+              </button>
+            </div>
+          </div>
+          <div className="overflow-x-auto rounded-2xl glass shadow-lg border border-primary/20 dark:border-primary-dark/30 section-transition">
+            <table className="min-w-full text-base font-['JetBrains_Mono',monospace]">
+              <thead>
+                <tr className="bg-primary/10 dark:bg-primary-dark/20">
+                  <th
+                    className="p-4 text-left cursor-pointer select-none font-semibold text-primary-dark dark:text-primary-light hover:underline"
+                    onClick={() => {
+                      setSortKey("name");
+                      setSortDir(
+                        sortKey === "name" && sortDir === "asc" ? "desc" : "asc"
+                      );
+                    }}
+                  >
+                    Name {sortKey === "name" && (sortDir === "asc" ? "▲" : "▼")}
+                  </th>
+                  <th
+                    className="p-4 text-left cursor-pointer select-none font-semibold text-primary-dark dark:text-primary-light hover:underline"
+                    onClick={() => {
+                      setSortKey("english");
+                      setSortDir(
+                        sortKey === "english" && sortDir === "asc"
+                          ? "desc"
+                          : "asc"
+                      );
+                    }}
+                  >
+                    English{" "}
+                    {sortKey === "english" && (sortDir === "asc" ? "▲" : "▼")}
+                  </th>
+                  <th
+                    className="p-4 text-left cursor-pointer select-none font-semibold text-primary-dark dark:text-primary-light hover:underline"
+                    onClick={() => {
+                      setSortKey("overall");
+                      setSortDir(
+                        sortKey === "overall" && sortDir === "asc"
+                          ? "desc"
+                          : "asc"
+                      );
+                    }}
+                  >
+                    Overall %{" "}
+                    {sortKey === "overall" && (sortDir === "asc" ? "▲" : "▼")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sorted.map((s, i) => (
+                  <tr
+                    key={s.name}
+                    className={
+                      i < 10 ? `${scheme.highlight} font-bold scale-in` : ""
+                    }
+                  >
+                    <td
+                      className="p-4 whitespace-nowrap text-lg"
+                      style={
+                        s.overall === maxOverall
+                          ? {
+                              color: "#FFD700",
+                              fontWeight: 900,
+                              letterSpacing: "0.02em",
+                              textShadow: "0 1px 8px #FFD70044",
+                            }
+                          : undefined
+                      }
+                    >
+                      {s.name}
+                    </td>
+                    <td className="p-4 text-lg">{s.english}</td>
+                    <td className="p-4 text-lg">{s.overall}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
